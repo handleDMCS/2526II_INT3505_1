@@ -1,0 +1,152 @@
+openapi: 3.0.3
+info:
+  title: API Quản lý Sách (Book Management Demo)
+  description: Demo API specification cho bài tập Buổi 4 - Quản lý thư viện/sách.
+  version: 1.0.0
+
+# ---------------------------------------------------------
+# PATHS (Endpoints)
+# ---------------------------------------------------------
+paths:
+  /books:
+    # Endpoint 1: Get all books
+    get:
+      summary: Lấy danh sách tất cả các cuốn sách
+      tags:
+        - Books
+      responses:
+        '200':
+          description: Lấy danh sách thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+                  
+    # Endpoint 2: Add a new book
+    post:
+      summary: Thêm một cuốn sách mới
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewBook'
+      responses:
+        '201':
+          description: Đã tạo sách thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+  /books/{bookId}:
+    # Applying the reusable parameter to all methods in this path
+    parameters:
+      - $ref: '#/components/parameters/BookIdParam'
+      
+    # Endpoint 3: Get a specific book by ID
+    get:
+      summary: Lấy thông tin chi tiết một cuốn sách theo ID
+      tags:
+        - Books
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Không tìm thấy sách
+          
+    # Endpoint 4: Update a book
+    put:
+      summary: Cập nhật thông tin sách
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewBook'
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Không tìm thấy sách
+          
+    # Endpoint 5: Delete a book
+    delete:
+      summary: Xóa một cuốn sách
+      tags:
+        - Books
+      responses:
+        '204':
+          description: Xóa thành công
+        '404':
+          description: Không tìm thấy sách
+
+# ---------------------------------------------------------
+# COMPONENTS (Schemas and Parameters)
+# ---------------------------------------------------------
+components:
+  parameters:
+    # Reusable Parameter definition
+    BookIdParam:
+      name: bookId
+      in: path
+      required: true
+      description: ID của cuốn sách cần thao tác
+      schema:
+        type: integer
+        format: int64
+        example: 1
+
+  schemas:
+    # Schema for returning a book (includes ID)
+    Book:
+      type: object
+      required:
+        - id
+        - title
+        - author
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        title:
+          type: string
+          example: "Dế Mèn Phiêu Lưu Ký"
+        author:
+          type: string
+          example: "Tô Hoài"
+        publishedYear:
+          type: integer
+          example: 1941
+
+    # Schema for creating/updating a book (no ID needed in request)
+    NewBook:
+      type: object
+      required:
+        - title
+        - author
+      properties:
+        title:
+          type: string
+          example: "Số Đỏ"
+        author:
+          type: string
+          example: "Vũ Trọng Phụng"
+        publishedYear:
+          type: integer
+          example: 1936

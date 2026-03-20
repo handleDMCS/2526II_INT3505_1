@@ -8,7 +8,7 @@ A simple RESTful API for managing a collection of books. This API is hosted/mock
 
 ## 🚀 Base URL
 ```text
-https://oas574183232d3e.free.beeceptor.com
+app.beeceptor.com/console/oas574183232d3e
 ```
 *(Note: Replace this with your actual Beeceptor endpoint if different)*
 
